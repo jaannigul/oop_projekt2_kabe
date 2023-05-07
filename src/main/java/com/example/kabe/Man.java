@@ -11,4 +11,8 @@ public class Man extends Piece{
         else this.symbol = Board.manBlackSymbol;
     }
 
+    @Override
+    public String toString() {
+        return "Man";
+    }
 }

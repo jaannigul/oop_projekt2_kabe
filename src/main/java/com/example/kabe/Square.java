@@ -26,5 +26,10 @@ public class Square {
         isEmpty = false;
     }
 
-
+    @Override
+    public String toString() {
+        if (!isEmpty())
+            return contains.toString();
+        return null;
+    }
 }

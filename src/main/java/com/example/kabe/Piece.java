@@ -1,6 +1,7 @@
 package com.example.kabe;
 
-public abstract class Piece {
+
+public class Piece{
     public String symbol;
     private boolean color; // 1-valge 0-must
 

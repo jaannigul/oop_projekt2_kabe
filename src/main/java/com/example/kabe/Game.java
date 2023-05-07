@@ -130,4 +130,12 @@ public class Game {
 
         return indexArr;
     }
+
+    public Board getGameBoard() {
+        return gameBoard;
+    }
+
+    public void setGameBoard(Board gameBoard) {
+        this.gameBoard = gameBoard;
+    }
 }
