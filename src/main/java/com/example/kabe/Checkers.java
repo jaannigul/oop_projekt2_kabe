@@ -38,37 +38,13 @@ public class Checkers extends Application {
         gridPane.setHgap(0);
         gridPane.setVgap(0);
 
+        Board board = game.getGameBoard();
+
         // kabelaua ruudustik
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                Rectangle tile = new Rectangle(TILE_SIZE, TILE_SIZE, ((row + col) % 2 == 0) ? Color.BEIGE : Color.DARKGRAY);
-                StackPane tilePane = new StackPane();
-                tilePane.getChildren().add(tile);
-                gridPane.add(tilePane, col, row);
-
-
-                // nupud
-                if (row < 4 && (row + col) % 2 != 0) {
-                    Circle piece = new Circle(TILE_SIZE / 2 - 5, Color.RED);
-                    pieces[row][col] = piece;
-                    tilePane.getChildren().add(piece);
-                    //punaste nuppudega ei saa mängida
-
-
-                } else if (row > 5 && (row + col) % 2 != 0) {
-                    Circle piece = new Circle(TILE_SIZE / 2 - 5, Color.BLACK);
-                    pieces[row][col] = piece;
-                    tilePane.getChildren().add(piece);
-                    //System.out.println(tilePane.getChildren());
-
-                    // sündmused nupule
-                    addMouseHandlers(piece);
-                }
-            }
-        }
+        drawBoard(board);
 
         System.out.println(Arrays.deepToString(game.getGameBoard().getBoard()));//debug
-        UItoBoard();
+        //UItoBoard();
         System.out.println(Arrays.deepToString(game.getGameBoard().getBoard()));//debug
         pane.getChildren().add(gridPane);
         Scene scene = new Scene(pane);
@@ -107,15 +83,21 @@ public class Checkers extends Application {
 
         piece.setOnMouseReleased(e -> {
             // leiab nupu sihtkoha
+            int targetCol = (int)(e.getSceneX() / (TILE_SIZE));
+            int targetRow = (int)(e.getSceneY() / (TILE_SIZE));
             StackPane targetTile = (StackPane) piece.getParent();
-            int targetRow = GridPane.getRowIndex(targetTile);
-            int targetCol = GridPane.getColumnIndex(targetTile);
+
+            //int targetRow = GridPane.getRowIndex(targetTile);
+            //int targetCol = GridPane.getColumnIndex(targetTile);
 
             // käigu kontrollimine
             int[] move = {sourceRow, sourceCol, targetRow, targetCol};
-            System.out.println(Arrays.deepToString(game.getGameBoard().getBoard()));//debug
-            //System.out.println(game.getGameBoard().legalMoves);
-            movePiece(sourceRow, sourceCol, targetRow, targetCol);
+            System.out.println(Integer.toString(sourceRow) + " " +
+                                Integer.toString(sourceCol) + " " +
+                                Integer.toString((targetRow))+ " " +
+                                Integer.toString((targetCol)));
+            game.playPlyGUI(sourceRow, sourceCol, targetRow, targetCol);
+            drawBoard(game.getGameBoard());
 /*
             if (game.getGameBoard().isLegalMove(move)) {
                 movePiece(sourceRow, sourceCol, targetRow, targetCol);
@@ -173,6 +155,51 @@ public class Checkers extends Application {
                     else if (piece.getFill().equals(Color.RED))
                         game.getGameBoard().getBoard()[row][column] = new Square(false, new Man(true));
                     else game.getGameBoard().getBoard()[row][column] = new Square(true, null);
+                }
+            }
+        }
+    }
+
+    public void drawBoard(Board board) {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                Rectangle tile = new Rectangle(TILE_SIZE, TILE_SIZE, ((row + col) % 2 == 0) ? Color.BEIGE : Color.DARKGRAY);
+                StackPane tilePane = new StackPane();
+                tilePane.getChildren().add(tile);
+                gridPane.add(tilePane, col, row);
+                /*
+                // nupud
+                if (row < 4 && (row + col) % 2 != 0) {
+                    Circle piece = new Circle(TILE_SIZE / 2 - 5, Color.RED);
+                    pieces[row][col] = piece;
+                    tilePane.getChildren().add(piece);
+                    //punaste nuppudega ei saa mängida
+
+
+                } else if (row > 5 && (row + col) % 2 != 0) {
+                    Circle piece = new Circle(TILE_SIZE / 2 - 5, Color.BLACK);
+                    pieces[row][col] = piece;
+                    tilePane.getChildren().add(piece);
+                    //System.out.println(tilePane.getChildren());
+
+                    // sündmused nupule
+                    addMouseHandlers(piece);
+                }
+                */
+                if (board.getBoard()[row][col].isEmpty()) {
+                    pieces[row][col] = null;
+                    continue;
+                }
+                if (board.getBoard()[row][col].getContains().isColor()) {
+                    Circle piece = new Circle(TILE_SIZE / 2 - 5, Color.BLACK);
+                    pieces[row][col] = piece;
+                    tilePane.getChildren().add(piece);
+                    addMouseHandlers(piece);
+                }
+                if (!board.getBoard()[row][col].getContains().isColor()) {
+                    Circle piece = new Circle(TILE_SIZE / 2 - 5, Color.RED);
+                    pieces[row][col] = piece;
+                    tilePane.getChildren().add(piece);
                 }
             }
         }

@@ -163,7 +163,7 @@ public class Board {
         if (Math.abs(startJ - endJ) == 2) {
             board[endI][endJ].setSquarePiece(movingPiece);
             board[startI][startJ].clearSquare();
-            board[startI + (endI - startI) / 2][startJ + (endJ - startJ) / 2].clearSquare();
+            board[startI + ((endI - startI) / 2)][startJ + ((endJ - startJ) / 2)].clearSquare();
         } else {
             board[endI][endJ].setSquarePiece(movingPiece);
             board[startI][startJ].clearSquare();

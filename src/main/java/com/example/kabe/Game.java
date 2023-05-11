@@ -16,6 +16,34 @@ public class Game {
     private final char[] col = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
     private final int[] row = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
+    public void playPlyGUI(int row1, int col1, int row2, int col2) {
+        boolean moveMade = false;
+        gameBoard.generateLegalMoves(true);
+        while(!moveMade) {
+            int[] moveAsCoords = {row1, col1, row2, col2};
+            if (moveAsCoords.length != 4) {
+                System.out.println("Ei ole legaalne käik, proovi uuesti");
+                return;
+            } else if (gameBoard.isLegalMove(moveAsCoords)) {
+                gameBoard.move(moveAsCoords);
+                moveMade = true;
+                isPlayersMove = false;
+            } else {
+                System.out.println("Ei ole legaalne käik, proovi uuesti");
+                return;
+            }
+        }
+        gameBoard.generateLegalMoves(false);
+        int randomIndex = (int) (Math.random()*gameBoard.legalMoves.size());
+        int[] computerMove = gameBoard.legalMoves.get(randomIndex);
+        while (computerMove.length == 0) {
+            randomIndex = (int) (Math.random() * gameBoard.legalMoves.size());
+            computerMove = gameBoard.legalMoves.get(randomIndex);
+        }
+        gameBoard.move(computerMove);
+
+
+    }
     public void playPly() {
         boolean moveMade = false;
         gameBoard.generateLegalMoves(true);
